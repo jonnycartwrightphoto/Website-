@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Field & Frame — Rural Business Photography</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --white:   #FAFAF7;
+      --linen:   #F1EDE6;
+      --stone:   #C8C0B4;
+      --bark:    #6B5F52;
+      --earth:   #3A3028;
+      --accent:  #7A8C6E; /* sage — the one colour risk */
+
+      --display: 'Cormorant Garamond', Georgia, serif;
+      --body:    'DM Sans', system-ui, sans-serif;
+
+      --max: 1200px;
+      --gap: clamp(2rem, 5vw, 5rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--white);
+      color: var(--earth);
+      font-family: var(--body);
+      font-weight: 300;
+      font-size: clamp(0.9rem, 1.1vw, 1rem);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem clamp(1.5rem, 4vw, 3rem);
+      background: rgba(250,250,247,0.88);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--linen);
+    }
+
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 1.25rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: var(--earth);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--bark);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--earth); }
+
+    .nav-cta {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white) !important;
+      background: var(--earth);
+      padding: 0.55rem 1.4rem;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .nav-cta:hover { background: var(--accent) !important; color: var(--white) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100svh;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      padding-top: 80px;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--gap) clamp(1.5rem, 4vw, 3rem);
+      max-width: var(--max);
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .eyebrow {
+      font-family: var(--body);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--earth);
+      max-width: 14ch;
+      margin-bottom: 1.8rem;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--bark);
+    }
+
+    .hero-sub {
+      font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+      color: var(--bark);
+      max-width: 42ch;
+      margin-bottom: 2.5rem;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--earth);
+      color: var(--white);
+      font-family: var(--body);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.9rem 2.2rem;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.15s;
+      align-self: flex-start;
+    }
+
+    .btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+
+    /* ── HORIZON STRIP (signature element) ── */
+    .horizon-strip {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      height: clamp(220px, 38vw, 480px);
+      margin-top: 2rem;
+    }
+
+    .horizon-track {
+      display: flex;
+      height: 100%;
+      gap: 3px;
+      animation: drift 40s linear infinite;
+      width: max-content;
+    }
+
+    @keyframes drift {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .horizon-track { animation: none; }
+    }
+
+    .horizon-track:hover { animation-play-state: paused; }
+
+    .horizon-img {
+      height: 100%;
+      width: clamp(260px, 28vw, 520px);
+      flex-shrink: 0;
+      object-fit: cover;
+      filter: brightness(0.96);
+      transition: filter 0.3s;
+    }
+
+    .horizon-img:hover { filter: brightness(1.04); }
+
+    /* placeholder tiles when no real photos */
+    .ph {
+      height: 100%;
+      width: clamp(260px, 28vw, 520px);
+      flex-shrink: 0;
+      display: flex;
+      align-items: flex-end;
+      padding: 1.2rem;
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.04em;
+    }
+
+    /* earthy landscape placeholder colours */
+    .ph-1 { background: #C2BAA6; }
+    .ph-2 { background: #8E9D7E; }
+    .ph-3 { background: #B5A898; }
+    .ph-4 { background: #7A8C6E; }
+    .ph-5 { background: #A89F8C; }
+    .ph-6 { background: #6B7A5C; }
+    .ph-7 { background: #C8C0A8; }
+    .ph-8 { background: #9EAA8C; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--linen);
+      margin: 0;
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      padding: clamp(4rem, 8vw, 8rem) clamp(1.5rem, 4vw, 3rem);
+    }
+
+    .section-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 6vw, 6rem);
+      align-items: center;
+    }
+
+    .about-photo {
+      aspect-ratio: 4/5;
+      background: var(--linen);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .about-photo-ph {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(160deg, #C8C0B4 0%, #8E9D7E 100%);
+      display: flex;
+      align-items: flex-end;
+      padding: 1.5rem;
+      font-family: var(--display);
+      font-style: italic;
+      color: rgba(255,255,255,0.8);
+      font-size: 1.1rem;
+    }
+
+    h2 {
+      font-family: var(--display);
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--earth);
+      margin-bottom: 1.4rem;
+    }
+
+    h2 em { font-style: italic; color: var(--bark); }
+
+    .about-body p { color: var(--bark); margin-bottom: 1rem; }
+
+    .btn-outline {
+      display: inline-block;
+      border: 1px solid var(--earth);
+      color: var(--earth);
+      font-family: var(--body);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 2px;
+      margin-top: 1.2rem;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-outline:hover { background: var(--earth); color: var(--white); }
+
+    /* ── PORTFOLIO GRID ── */
+    .portfolio-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 3px;
+    }
+
+    .pg-item {
+      overflow: hidden;
+      border-radius: 1px;
+      background: var(--linen);
+      position: relative;
+    }
+
+    /* varied layout — feels editorial */
+    .pg-item:nth-child(1) { grid-column: span 7; }
+    .pg-item:nth-child(2) { grid-column: span 5; }
+    .pg-item:nth-child(3) { grid-column: span 4; }
+    .pg-item:nth-child(4) { grid-column: span 4; }
+    .pg-item:nth-child(5) { grid-column: span 4; }
+    .pg-item:nth-child(6) { grid-column: span 8; }
+    .pg-item:nth-child(7) { grid-column: span 4; }
+
+    .pg-ph {
+      width: 100%;
+      padding-bottom: 70%;
+      position: relative;
+    }
+
+    .pg-item:nth-child(1) .pg-ph,
+    .pg-item:nth-child(6) .pg-ph { padding-bottom: 58%; }
+
+    .pg-ph-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.75);
+      transition: transform 0.4s ease;
+    }
+
+    .pg-item:hover .pg-ph-inner { transform: scale(1.02); }
+
+    .pg-c1 { background: #B5A898; }
+    .pg-c2 { background: #7A8C6E; }
+    .pg-c3 { background: #A89F8C; }
+    .pg-c4 { background: #6B7A5C; }
+    .pg-c5 { background: #C8C0A8; }
+    .pg-c6 { background: #8E9D7E; }
+    .pg-c7 { background: #9EAA8C; }
+
+    .pg-caption {
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--stone);
+      padding: 0.6rem 0.8rem;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--linen); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2px;
+      margin-top: 3rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      padding: 2.4rem 2rem;
+      border-radius: 1px;
+    }
+
+    .service-icon {
+      font-family: var(--display);
+      font-size: 2rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      line-height: 1;
+    }
+
+    .service-card h3 {
+      font-family: var(--display);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--earth);
+      margin-bottom: 0.6rem;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--bark);
+      line-height: 1.65;
+    }
+
+    /* ── PROCESS ── */
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem 4rem;
+      margin-top: 3rem;
+    }
+
+    .step-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+
+    .step h3 {
+      font-family: var(--display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+      color: var(--earth);
+    }
+
+    .step p { font-size: 0.88rem; color: var(--bark); }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials { background: var(--earth); }
+
+    #testimonials .eyebrow { color: var(--accent); }
+
+    #testimonials h2 { color: var(--white); }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2px;
+      margin-top: 3rem;
+    }
+
+    .testi-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 2.2rem 2rem;
+      border-radius: 1px;
+    }
+
+    .testi-quote {
+      font-family: var(--display);
+      font-size: 1.15rem;
+      font-style: italic;
+      color: rgba(250,250,247,0.85);
+      line-height: 1.6;
+      margin-bottom: 1.4rem;
+    }
+
+    .testi-name {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+
+    .testi-biz {
+      font-size: 0.72rem;
+      color: var(--accent);
+      margin-top: 0.2rem;
+    }
+
+    /* ── BOOKING CTA ── */
+    #book {
+      text-align: center;
+      padding: clamp(5rem, 10vw, 10rem) clamp(1.5rem, 4vw, 3rem);
+    }
+
+    #book h2 {
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      margin-bottom: 1rem;
+    }
+
+    #book .hero-sub {
+      margin: 0 auto 2.5rem;
+      text-align: center;
+    }
+
+    .book-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 520px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .book-form input,
+    .book-form select,
+    .book-form textarea {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--stone);
+      border-radius: 2px;
+      background: var(--white);
+      font-family: var(--body);
+      font-size: 0.9rem;
+      color: var(--earth);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .book-form input:focus,
+    .book-form select:focus,
+    .book-form textarea:focus { border-color: var(--accent); }
+
+    .book-form textarea { resize: vertical; min-height: 120px; }
+
+    .book-form button {
+      background: var(--earth);
+      color: var(--white);
+      border: none;
+      padding: 1rem 2.5rem;
+      font-family: var(--body);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .book-form button:hover { background: var(--accent); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--linen);
+      padding: 3rem clamp(1.5rem, 4vw, 3rem);
+      border-top: 1px solid var(--stone);
+    }
+
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-logo {
+      font-family: var(--display);
+      font-size: 1.1rem;
+      color: var(--earth);
+    }
+
+    .footer-logo span { color: var(--accent); }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--bark);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--earth); }
+
+    .footer-copy {
+      font-size: 0.72rem;
+      color: var(--stone);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .about-photo { max-height: 320px; }
+
+      .pg-item:nth-child(1) { grid-column: span 12; }
+      .pg-item:nth-child(2) { grid-column: span 12; }
+      .pg-item:nth-child(3) { grid-column: span 6; }
+      .pg-item:nth-child(4) { grid-column: span 6; }
+      .pg-item:nth-child(5) { grid-column: span 12; }
+      .pg-item:nth-child(6) { grid-column: span 12; }
+      .pg-item:nth-child(7) { grid-column: span 12; }
+
+      .nav-links { display: none; }
+      .portfolio-header { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Field<span> & </span>Frame</a>
+    <ul class="nav-links">
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#book" class="nav-cta">Book a Shoot</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-content">
+      <p class="eyebrow">Rural Business Photography</p>
+      <h1>Your land.<br><em>Your story.</em><br>Told honestly.</h1>
+      <p class="hero-sub">Imagery for farms, ranches, makers, and rural businesses that want to be seen — not styled.</p>
+      <a href="#book" class="btn-primary">Book Your Session</a>
+    </div>
+
+    <!-- SIGNATURE ELEMENT: drifting horizon strip -->
+    <div class="horizon-strip" aria-hidden="true">
+      <div class="horizon-track">
+        <!-- Original set -->
+        <div class="ph ph-1">Morning pasture</div>
+        <div class="ph ph-2">Harvest season</div>
+        <div class="ph ph-3">Family ranch</div>
+        <div class="ph ph-4">Artisan workshop</div>
+        <div class="ph ph-5">Golden hour fields</div>
+        <div class="ph ph-6">Market stall</div>
+        <div class="ph ph-7">Livestock portrait</div>
+        <div class="ph ph-8">Barn interior</div>
+        <!-- Duplicate for seamless loop -->
+        <div class="ph ph-1">Morning pasture</div>
+        <div class="ph ph-2">Harvest season</div>
+        <div class="ph ph-3">Family ranch</div>
+        <div class="ph ph-4">Artisan workshop</div>
+        <div class="ph ph-5">Golden hour fields</div>
+        <div class="ph ph-6">Market stall</div>
+        <div class="ph ph-7">Livestock portrait</div>
+        <div class="ph ph-8">Barn interior</div>
+      </div>
+    </div>
+  </header>
+
+  <hr class="divider" />
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-photo">
+          <div class="about-photo-ph">Photographer portrait</div>
+        </div>
+        <div class="about-body reveal">
+          <p class="eyebrow">About</p>
+          <h2>Rooted in <em>rural life</em></h2>
+          <p>I grew up on working land. That means I understand the 4am starts, the seasonal rhythms, and the quiet pride in what you've built — and I know how to photograph it without making it look like a stock image.</p>
+          <p>My work is for farms, market gardens, rural makers, agritourism businesses, and anyone whose brand lives outdoors. If you want images that actually look like your place, let's talk.</p>
+          <a href="#book" class="btn-outline">Start a Conversation</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio">
+    <div class="section-inner">
+      <div class="portfolio-header">
+        <div class="reveal">
+          <p class="eyebrow">Portfolio</p>
+          <h2>Recent <em>work</em></h2>
+        </div>
+        <a href="#book" class="btn-outline reveal">Book a Similar Shoot</a>
+      </div>
+
+      <div class="portfolio-grid">
+        <div class="pg-item reveal">
+          <div class="pg-ph"><div class="pg-ph-inner pg-c1">Sunrise over the valley</div></div>
+          <div class="pg-caption">Wheatfield Farm Co.</div>
+        </div>
+        <div class="pg-item reveal">
+          <div class="pg-ph"><div class="pg-ph-inner pg-c2">Processing barn detail</div></div>
+          <div class="pg-caption">Ridgebrook Cider</div>
+        </div>
+        <div class="pg-item reveal">
+          <div class="pg-ph"><div class="pg-ph-inner pg-c3">Farmers market presence</div></div>
+          <div class="pg-caption">Clover Hill Honey</div>
+        </div>
+        <div class="pg-item reveal">
+          <div class="pg-ph"><div class="pg-ph-inner pg-c4">Working hands at rest</div></div>
+          <div class="pg-caption">Ironside Leather Co.</div>
+        </div>
+        <div class="pg-item reveal">
+          <div class="pg-ph"><div class="pg-ph-inner pg-c5">Flock on the move</div></div>
+          <div class="pg-caption">Hawthorn Sheep Co.</div>
+        </div>
+        <div class="pg-item reveal">
+          <div class="pg-ph"><div class="pg-ph-inner pg-c6">Golden hour harvest</div></div>
+          <div class="pg-caption">Millstone Grain</div>
+        </div>
+        <div class="pg-item reveal">
+          <div class="pg-ph"><div class="pg-ph-inner pg-c7">Workshop interior</div></div>
+          <div class="pg-caption">Cedar & Stone Pottery</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <div class="reveal">
+        <p class="eyebrow">What I offer</p>
+        <h2>Shoots built around <em>your season</em></h2>
+      </div>
+      <div class="services-grid">
+        <div class="service-card reveal">
+          <div class="service-icon">◈</div>
+          <h3>Brand Day</h3>
+          <p>A full day on your property. We capture the breadth of your business — landscapes, portraits, products, and process — in one session.</p>
+        </div>
+        <div class="service-card reveal">
+          <div class="service-icon">◇</div>
+          <h3>Seasonal Set</h3>
+          <p>Four half-day visits across the year. Your imagery stays current and shows the honest change of your land through the seasons.</p>
+        </div>
+        <div class="service-card reveal">
+          <div class="service-icon">◉</div>
+          <h3>Product & Market</h3>
+          <p>Focused shoots for market stalls, online shops, and packaging. Clean, honest product photography that sells without pretending.</p>
+        </div>
+        <div class="service-card reveal">
+          <div class="service-icon">◎</div>
+          <h3>Portraits</h3>
+          <p>You, your family, your team — on your land, in your work clothes. Environmental portraits that tell the truth about who you are.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="section-inner">
+      <div class="reveal">
+        <p class="eyebrow">How it works</p>
+        <h2>Simple from <em>start to finish</em></h2>
+      </div>
+      <div class="process-steps">
+        <div class="step reveal">
+          <p class="step-label">First</p>
+          <h3>Enquire</h3>
+          <p>Fill in the booking form below. Tell me about your business, your land, and what you're hoping to use the images for.</p>
+        </div>
+        <div class="step reveal">
+          <p class="step-label">Then</p>
+          <h3>Plan Together</h3>
+          <p>We'll talk through timing (season matters), locations on your property, and the kind of story you want to tell.</p>
+        </div>
+        <div class="step reveal">
+          <p class="step-label">Shoot Day</p>
+          <h3>Show Up as You Are</h3>
+          <p>No styling, no staging. We work with what's real. The best shots happen when you're just doing what you do.</p>
+        </div>
+        <div class="step reveal">
+          <p class="step-label">Delivery</p>
+          <h3>Images in Hand</h3>
+          <p>Edited gallery delivered within two weeks. Formatted for web, print, and social. Yours to use however you need.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="section-inner">
+      <div class="reveal">
+        <p class="eyebrow">From clients</p>
+        <h2>What they <em>say</em></h2>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card reveal">
+          <p class="testi-quote">"We'd tried two other photographers who made our farm look like a catalogue. These images actually look like us — like our mud, our light, our chaos. We use them everywhere."</p>
+          <p class="testi-name">Sarah & Tom Hollis</p>
+          <p class="testi-biz">Hollis Heritage Farm</p>
+        </div>
+        <div class="testi-card reveal">
+          <p class="testi-quote">"Booked the Seasonal Set and it's completely changed how we show up online. Customers keep telling us the photos are what made them drive out to find us."</p>
+          <p class="testi-name">Danny Reeve</p>
+          <p class="testi-biz">Ridgebrook Cider</p>
+        </div>
+        <div class="testi-card reveal">
+          <p class="testi-quote">"I'm not someone who likes having my photo taken. But within ten minutes I forgot the camera was there. The portraits are the best thing I've ever put on my website."</p>
+          <p class="testi-name">Marta Voss</p>
+          <p class="testi-biz">Cedar & Stone Pottery</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOK -->
+  <section id="book">
+    <div class="section-inner">
+      <div class="reveal">
+        <p class="eyebrow">Get in touch</p>
+        <h2>Ready to <em>get started?</em></h2>
+        <p class="hero-sub">Tell me about your business and what you're looking for. I'll get back to you within two working days.</p>
+      </div>
+      <div class="book-form reveal">
+        <input type="text" placeholder="Your name" />
+        <input type="email" placeholder="Email address" />
+        <input type="text" placeholder="Business name" />
+        <select>
+          <option value="" disabled selected>Which shoot type interests you?</option>
+          <option>Brand Day</option>
+          <option>Seasonal Set</option>
+          <option>Product & Market</option>
+          <option>Portraits</option>
+          <option>Not sure yet</option>
+        </select>
+        <textarea placeholder="Tell me about your land and your business — the more the better."></textarea>
+        <button type="button">Send Enquiry</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-logo">Field<span> & </span>Frame</span>
+      <ul class="footer-links">
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#book">Book</a></li>
+      </ul>
+      <span class="footer-copy">© 2026 Field & Frame. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
